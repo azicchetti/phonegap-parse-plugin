@@ -73,7 +73,7 @@ that'll make the application close unexpectedly, you have to edit the `<applicat
 <application android:hardwareAccelerated="true" android:icon="@drawable/icon" android:label="@string/app_name" android:name="MyMainApp">
 ```
 
-* last step! You have to create the MyMainApp.java file into the proper directory. If your package is, for instance, "com.parse.starter", the file will reside into com/parse/starter/MyMainApp.java and its content will be (remember, you can find the keys you need into the settings page of your app on Parse):
+* last step! You have to create the MyMainApp.java file into the proper directory. If your package is, for instance, "com.parse.starter", the file will reside into src/com/parse/starter/MyMainApp.java and its content will be (remember, you can find the keys you need into the settings page of your app on Parse):
 
 ```
 package com.parse.starter;
