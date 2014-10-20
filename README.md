@@ -21,7 +21,7 @@ cordova plugin add https://github.com/azicchetti/phonegap-parse-plugin.git
 In order to use the plugin on Android, you've to properly setup the AndroidManifest.xml and do a couple of other simple things:
 
 * follow <a href="https://parse.com/apps/quickstart#parse_push/android/existing">this guide</a> to modify the AndroidManifest. If you update the Parse SDK you may have to add more things to the manifest.
-You'll probably have to add these lines before the closing </application> tag:
+You'll probably have to add these lines before the closing `</application>` tag:
 
 ```
 	<service android:name="com.parse.PushService" />
@@ -67,7 +67,7 @@ You'll probably have to add these lines before the closing </application> tag:
 
 * to avoid the dreaded error:
 	"java.lang.RuntimeException: Unable to start receiver com.parse.ParseBroadcastReceiver: java.lang.RuntimeException: applicationContext is null. You must call Parse.initialize(context, applicationId, clientKey) before using the Parse library."
-that'll make the application close unexpectedly, you have to edit the <application> tag in the AndroidManifest.xml and add android:name="MyMainApp" (you can change the MyMainApp name to something more meaningful):
+that'll make the application close unexpectedly, you have to edit the `<application>` tag in the AndroidManifest.xml and add `android:name="MyMainApp"` (you can change the MyMainApp name to something more meaningful):
 
 ```
 <application android:hardwareAccelerated="true" android:icon="@drawable/icon" android:label="@string/app_name" android:name="MyMainApp"
