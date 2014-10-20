@@ -47,12 +47,28 @@
 
 - (void)subscribe: (CDVInvokedUrlCommand *)command
 {
+    // Register for Push Notitications, if running iOS 8
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+      UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                      UIUserNotificationTypeBadge |
+                                                      UIUserNotificationTypeSound);
+      UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                               categories:nil];
+      [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+      [[UIApplication sharedApplication] registerForRemoteNotifications];
+    } else {
+      // Register for Push Notifications before iOS 8
+      [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                       UIRemoteNotificationTypeAlert |
+                                                       UIRemoteNotificationTypeSound)];
+    }
+/*
     // Not sure if this is necessary
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
         UIRemoteNotificationTypeBadge |
         UIRemoteNotificationTypeAlert |
         UIRemoteNotificationTypeSound];
-
+*/
     CDVPluginResult* pluginResult = nil;
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     NSString *channel = [command.arguments objectAtIndex:0];
@@ -69,6 +85,19 @@
     NSString *channel = [command.arguments objectAtIndex:0];
     [currentInstallation removeObject:channel forKey:@"channels"];
     [currentInstallation saveInBackground];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)setInstallationBadge:(CDVInvokedUrlCommand *)command
+{
+    CDVPluginResult* pluginResult = nil;
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    int badge = [[command.arguments objectAtIndex:0] intValue];
+    if (currentInstallation.badge != badge){
+        currentInstallation.badge = badge;
+        [currentInstallation saveInBackground];
+    }
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
@@ -120,7 +149,7 @@ void MethodSwizzle(Class c, SEL originalSelector) {
 {
     // Call existing method
     [self swizzled_application:application didReceiveRemoteNotification:userInfo];
-    [PFPush handlePush:userInfo];
+    //[PFPush handlePush:userInfo];
 }
 
 @end
